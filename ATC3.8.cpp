@@ -64,6 +64,10 @@ void spaces();
 
 void processing(string sentence);
 
+void goto_new_line();
+
+void add_space();
+
 int findword(string word,string words[],int limit){
     //cout<<"in findword"<<endl;
      int xx=0,counter=0;
@@ -170,9 +174,26 @@ else if(verb.compare(word) < 0){
 return condition;
 }
 
+
 int check(string word){
 transform(word.begin(), word.end(), word.begin(), ::tolower);
 
+int line_length = current_line.size();
+
+if(current_line == "print space" || current_line == "insert space") return 11;
+
+if(current_line == "print new line character") return 10;
+
+if(word == "go" || word == "goto" || word == "move"){
+    int custom_position = (int) current_line.find("new line");
+    if(line_length-custom_position == 8) {
+        return 10;
+    }
+    custom_position = (int) current_line.find("next line");
+    if(line_length-custom_position == 9) {
+        return 10;
+    }
+}
 
 if (word=="print" || word=="write" || word=="echo" || word=="show" || word=="display"){
     return 1;//1 is for print
@@ -303,7 +324,7 @@ string sentence_to_be_printed="";
 }
 
 void declare(){
-out<<"print(\"\")"<<endl;
+//out<<"print(\"\")"<<endl;
 while((*ptr_iss)>>word){
 
             if(word!="values" && word!="variables" && word!="and" && word!="," && word!="variable" &&word!="as"){
@@ -351,11 +372,11 @@ while((*ptr_iss)>>word){
                 m++;
             }
 
-out<<"print(\"\")"<<endl;
+//out<<"print(\"\")"<<endl;
 }
 
 void initialize(){
-out<<"print(\"\")"<<endl;
+//out<<"print(\"\")"<<endl;
 spaces();
        int found,counter=0;
        string sentence="";
@@ -444,8 +465,8 @@ spaces();
                 currentword_str=currentword[m];
                 out<<currentword_str<<endl;
           }
-spaces();
-out<<"print(\"\")"<<endl;
+//spaces();
+//out<<"print(\"\")"<<endl;
 }
 
 void spaces(){
@@ -1150,7 +1171,6 @@ space_counter_loop+=1;
     *ptr_iss>>word;
      status_word=word;
 
-
     if(word=="end"||word=="End"||word==")"||word=="}"||word=="]"){
         break;
     }
@@ -1169,24 +1189,24 @@ space_counter_loop+=1;
  }
 
 
-spaces();
-out<<"print(\"\")"<<endl;
+//spaces();
+//out<<"print(\"\")"<<endl;
 space_counter_loop-=1;
-
-
 }//the if condition function ends here
+
+void goto_new_line(){
+    out<<"print(\"\")"<<endl;
+}
+
+void add_space(){
+    out<<"print(\" \",end=\"\")"<<endl;
+}
 
 void function_definer(string word){
     int times_position=position_of_times(current_line);
         if(times_position!=-1){
 
-
-
         currentword_str=before_times(times_position-1);
-
-
-
-
 
             out<<"times_variable=0"<<endl;
             z=space_counter_loop;
@@ -1261,6 +1281,14 @@ void function_definer(string word){
                case 9: {
                    $assign();
                    break;
+               }
+               case 10: {
+                    goto_new_line();
+                    break;
+               }
+               case 11: {
+                    add_space();
+                    break;
                }
 
                default :{

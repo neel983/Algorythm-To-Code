@@ -1,0 +1,13 @@
+Here is an example of how my software works
+
+declare variable x and y
+initialise x with 5
+if x is greater than 5
+if x is greater than 100 and less than 1000
+print This value is too high
+go to the next line
+end of if
+end of if
+
+
+Thats it, Simple english readable format
